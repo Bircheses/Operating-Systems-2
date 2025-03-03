@@ -14,27 +14,46 @@ enum state {
 };
 
 int N = 5;
-int philosophers[N];
+state philState[N];
+mutex m;
 
-#define left (= (phindex + 1) % N)
-#define right (= (phindex + N - 1) % N)
+#define left ((philNum + 1) % N)
+#define right ((philNum + N - 1) % N)
 
-void eat(int i){
-    cout << "Phliosopher " << i << "started eating" << endl;
-    // every philosopher will eat for 100 milliseconds
-    this_thread::sleep_for(chrono::milliseconds(100));
-    cout << "Philosopher " << i << "stopped eating" << endl;
+void eat(int philNum){
+    cout << "Phliosopher " << philNum << "started eating" << endl;
+    // every philosopher will eat for 2 seconds
+    this_thread::sleep_for(chrono::seconds(2));
+    cout << "Philosopher " << philNum << "stopped eating" << endl;
 }
 
-void think(int i){
-    int time = rand()%1000 + 300;
-    cout << "Philosopher " << i << "thinking..." << endl;
-    this_thread::sleep_for(chrono::milliseconds(time));
+void think(int philNum){
+    int time = rand()%5 + 2;
+    cout << "Philosopher " << philNum << "thinking..." << endl;
+    this_thread::sleep_for(chrono::seconds(time));
+}
+
+void checkAvaibility(int philNum) {
+    if (philState[philNum] == hungry && philState[left] != eating && philState[right] != eating){
+        philState[philNum] = eating;
+        eat(philNum);
+    }
+}
+
+//Using dikstra's convention, which means that one philosopher will try to pick up two forks at the same time
+void pickUpForks(int philNum) {
+    m.lock();
+    philState[philNum] = hungry;
+}
+
+void releaseForks(int phnum) {
+
 }
 
 int main(){
     srand(time(NULL));
+
     for(int i=0; i<N; i++) {
-        philosophers[i] = i;
+        philState[i] = thinking;
     }
 }
