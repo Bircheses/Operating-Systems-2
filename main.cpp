@@ -3,9 +3,23 @@
 #include <iostream>
 #include <semaphore>
 #include <chrono>
+#include <ctime>
 
 using namespace std;
 
-int main(){
+void eating(int i){
+    cout << "Phliosopher " << i << "started eating" << endl;
+    // every philosopher will eat for 100 milliseconds
+    this_thread::sleep_for(chrono::milliseconds(100));
+    cout << "Philosopher " << i << "stopped eating" << endl;
+}
 
+void thinking(int i){
+    int time = rand()%1000 + 300;
+    cout << "Philosopher " << i << "thinking..." << endl;
+    this_thread::sleep_for(chrono::milliseconds(time));
+}
+
+int main(){
+    srand(time(NULL));
 }
