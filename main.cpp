@@ -12,7 +12,7 @@ using namespace std;
 #define left ((philNum + 1) % N)
 #define right ((philNum + N - 1) % N)
 
-// Three states in string
+// Two output strings for two states
 #define thinkString(philNum) cout << "Philosopher " << philNum << " is thinking..." << std::endl;
 #define eatString(philNum) cout << "Philosopher " << philNum << " is eating..." << std::endl;
 
@@ -32,12 +32,14 @@ string output;
 void checkAvaibility(int philNum) {
     if (philState[philNum] == hungry && philState[left] != eating && philState[right] != eating) {
         int randTime = rand() % 2 + 1;
-        criticalMutex.unlock();
         philState[philNum] = eating;
+        // Unlocking here because the philosopher had already changed his state, so other threads can have a access to critical section
+        criticalMutex.unlock();
         // Starts eating from 1 to 2 seconds
         stateChanged.release(); // Send the signal to write function to refresh the output
         this_thread::sleep_for(chrono::seconds(randTime));
     } else {
+        // Unlocking here also because we don't want to stop other philosophers from trying to grab the forks (maybe)
         criticalMutex.unlock();
     }
 }
