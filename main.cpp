@@ -13,8 +13,8 @@ using namespace std;
 #define right ((philNum + N - 1) % N)
 
 // Two output strings for two states
-#define thinkString(philNum) cout << "Philosopher " << philNum << " is thinking..." << std::endl;
-#define eatString(philNum) cout << "Philosopher " << philNum << " is eating..." << std::endl;
+#define thinkString(philNum) cout << "Philosopher " << philNum << " is thinking..." << endl;
+#define eatString(philNum) cout << "Philosopher " << philNum << " is eating..." << endl;
 
 enum state {
     eating,
@@ -88,6 +88,11 @@ void write() {
 
 int main() {
     srand(time(NULL));
+
+
+    cout << "Wprowadz liczbe filozofow: " << endl;
+    cin >> N;
+
 
     auto *threads = new thread[N];
     philState = new state[N];
